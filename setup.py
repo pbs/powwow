@@ -6,6 +6,7 @@ README_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                    'README.rst')
 dependencies = [
     'django',
+    'django-extraconfig',
     'south',
 ]
 
