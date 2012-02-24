@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="PowWow">
+    <Require feature="rpc"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+      <script src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=0.2"></script>
+      <!-- Your application code -->
+      <div>Hello world!</div>
+    ]]>
+  </Content>
+</Module>

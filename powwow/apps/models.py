@@ -1,3 +1,16 @@
 from django.db import models
 
-# Create your models here.
+SETTING_NAME = (
+    ('conf_space', 'Confluence Space Key'),
+    ('conf_page', 'Confluence Page'),
+    ('jira_project', 'JIRA Project Name'),
+)
+
+class AppSettings(models.Model):
+    name = models.CharField(max_length=50,
+            primary_key=True,
+            choices=SETTING_NAME)
+    content = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name_plural = "settings"
