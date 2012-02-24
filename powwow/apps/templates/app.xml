@@ -10,9 +10,11 @@
 <script type="text/javascript">google.load("jquery", "1.7.1");</script>
 <script type="text/javascript" 
   src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=0.2"></script>
-<script type="text/javascript" src="/static/powwow.js"></script>
+<script type="text/javascript" 
+  src="{{ request.build_absolute_uri }}/static/powwow.js"></script>
 
-<link type="text/css" rel="stylesheet" href="/static/powwow.css" />
+<link type="text/css" rel="stylesheet" 
+  href="{{ request.build_absolute_uri }}/static/powwow.css" />
 
 <div>Hello world!</div>
 
