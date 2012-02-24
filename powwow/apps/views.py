@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 
-from apps.models import AppSettings
+from powwow.apps.models import AppSettings
 
 
 def index(request):

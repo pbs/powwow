@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('apps.views',
+urlpatterns = patterns('powwow.apps.views',
     url(r'^app.xml$', 'index', name='index'),
 )
