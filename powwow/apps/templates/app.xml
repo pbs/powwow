@@ -3,11 +3,18 @@
   <ModulePrefs title="PowWow">
     <Require feature="rpc"/>
   </ModulePrefs>
-  <Content type="html">
-    <![CDATA[
-      <script src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=0.2"></script>
-      <!-- Your application code -->
-      <div>Hello world!</div>
-    ]]>
-  </Content>
+  <Content type="html"><![CDATA[
+
+<!DOCTYPE html>
+<script type="text/javascript" src="//www.google.com/jsapi"></script>
+<script type="text/javascript">google.load("jquery", "1.7.1");</script>
+<script type="text/javascript" 
+  src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=0.2"></script>
+<script type="text/javascript" src="/static/powwow.js"></script>
+
+<link type="text/css" rel="stylesheet" href="/static/powwow.css" />
+
+<div>Hello world!</div>
+
+]]></Content>
 </Module>
