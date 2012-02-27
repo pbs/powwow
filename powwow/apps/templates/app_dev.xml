@@ -13,12 +13,12 @@
   src="//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=0.2"></script>
 
 <script type="text/javascript"
-  src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  src="http://local.dev:8000/static/js/bootstrap.js"></script>
 <script type="text/javascript"
-  src="{{ STATIC_URL }}powwow.js"></script>
+  src="http://local.dev:8000/static/powwow.js"></script>
 
 <link type="text/css" rel="stylesheet"
-  href="{{ STATIC_URL }}css/bootstrap.min.css" />
+  href="http://local.dev:8000/static/css/bootstrap.css" />
 
 <div class="container-fluid">
   <div class="row-fluid">
