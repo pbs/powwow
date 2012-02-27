@@ -12,7 +12,8 @@ from powwow.apps.models import AppSettings
 
 
 def index(request):
-    return render_to_response('app.xml')
+    static_url = settings.STATIC_URL
+    return render_to_response('app.xml', {'static_url': static_url})
 
 
 def index_dev(request):
