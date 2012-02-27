@@ -17,6 +17,10 @@
 <script type="text/javascript"
   src="{{ url_static }}powwow.js"></script>
 
+<script type="text/javascript">
+  __POWWOW_SITE_URL = '{{ url_static }}'
+</script>
+
 <link type="text/css" rel="stylesheet"
   href="{{ url_static }}css/bootstrap.min.css" />
 

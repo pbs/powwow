@@ -4,8 +4,6 @@
  * More info: https://github.com/pbs/powwow
 */
 
-__POWWOW_SITE_URL = '/'
-
 if (typeof gapi != 'undefined'){
     gapi.hangout.onApiReady.add(function(eventObj){
         if (eventObj.isApiReady) {
