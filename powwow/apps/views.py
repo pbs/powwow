@@ -55,14 +55,18 @@ def confluence(request):
 
 def jira(request):
     session = login()
+    # TODO: date should not be hardcoded!
     jql = "project = UNICORN AND updated >= 2012-02-24 order by updated"
-    url = "%s/search?jql=%s&startAt=0&limit=100" % (settings.JIRA_API, urllib2.quote(jql))
-    req = urllib2.Request(url)
-    agent = urllib.urlopener()
-    response = urllib2.urlopen(req)
+    url = ("%s/search?jql=%s&startAt=0&maxResults=10&JSESSIONID=%s"
+           % (settings.JIRA_API, urllib2.quote(jql), session["JSESSIONID"]))
+
+    opener = urllib2.build_opener()
+    opener.addheaders.append(('Cookie', 'JSESSIONID=%s' % session["JSESSIONID"]))
+    response = opener.open(url)
+
     issues = json.loads(response.read())
     print "*** %s" % issues
-    return render_to_response('jira.html', {'issues': issues})
+    return render_to_response('jira.html', {'issues': issues.get("issues")})
     
 def jira_issue(request):
     return json.dumps(get_issue("UNICORN-3646"))
@@ -79,8 +83,6 @@ def get_issue(issue_id):
 def login():
     url = "%s/session" % settings.JIRA_AUTH
     values = {"username": settings.CONFLUENCE_USER, "password": settings.CONFLUENCE_PASS}
-    #data = urllib.urlencode(values)
-    #headers = {'Content-type': 'application/x-www-form-urlencoded'}
     data = json.dumps(values)
     headers = {'Content-type': 'application/json'}
     req = urllib2.Request(url, data, headers)

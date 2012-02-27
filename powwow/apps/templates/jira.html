@@ -1,1 +1,8 @@
 <h3>JIRA stream</h3>
+<ul>
+{% for issue in issues %}
+<li>
+<a href="{{ issue.self }}">{{ issue.key }}</a>
+</li>
+{% endfor %}
+</ul>
