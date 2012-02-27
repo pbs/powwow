@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 README_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                    'README.rst')
 dependencies = [
-    'django',
+    'django>=1.3',
     'django-extraconfig',
     'south',
 ]
