@@ -1,11 +1,12 @@
 <h3>Daily stand-up notes</h3>
-<form onsubmit="return false;">
+<form id="confluence_form" onsubmit="confluence_save(this);return false;" action="" method="post">
+  {% csrf_token %}
   <fieldset>
     <div class="control-group">
       <label class="control-label" for="textarea">(These notes will be saved
         directly into Confluence)</label>
       <div class="controls">
-        <textarea class="input-xxlarge" rows="20">{{ content }}</textarea>
+        <textarea class="input-xxlarge" name="notes" rows="20">{{ content }}</textarea>
       </div>
     </div>
     <div class="form-actions" style="text-align: right">

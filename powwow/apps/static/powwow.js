@@ -34,6 +34,29 @@ function confluence(){
     });
 }
 
+function confluence_save(form){
+    var button = $(form).find('button.btn');
+    button.text('Saving ...')
+        .removeClass('btn-primary')
+        .addClass('btn-warning');
+
+    $.post(__POWWOW_SITE_URL + 'confluence', $(form).serialize(),
+        function(data){
+            button.text('Success')
+                .removeClass('btn-warning')
+                .addClass('btn-success');
+            setTimeout('button_change_to_save()', 1500);
+        }
+    );
+}
+
+function button_change_to_save(){
+    $('#confluence_form button.btn')
+        .text('Save changes')
+        .addClass('btn-primary')
+        .removeClass('btn-success');
+}
+
 function jira(){
     var container = $('#jira_container');
     $.ajax({
