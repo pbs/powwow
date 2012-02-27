@@ -6,6 +6,7 @@ import json
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.conf import settings
+from django.core.context_processors import csrf
 
 from powwow.apps.models import AppSettings
 
@@ -13,11 +14,14 @@ from powwow.apps.models import AppSettings
 def index(request):
     return render_to_response('app.xml')
 
+
 def index_dev(request):
     return render_to_response('app_dev.xml')
 
+
 def local_dev(request):
     return render_to_response('app_dev.html')
+
 
 def confluence(request):
     spacekey = AppSettings.objects.get(name='conf_space')
@@ -37,7 +41,16 @@ def confluence(request):
     if page is None:
        return HttpResponse("Could not find page "+spacekey+":"+pagetitle)
 
-    return render_to_response('confluence.html', {'content': page['content']})
+    if request.method == 'POST':
+       for key,value in request.POST.iteritems():
+           if key == 'notes':
+               page['content'] = value
+               server.confluence1.storePage(token, page)
+
+    params = {'content': page['content']}
+    params.update(csrf(request))
+    return render_to_response('confluence.html', params)
+
 
 def jira(request):
     session = login()
@@ -52,6 +65,7 @@ def jira(request):
     
 def jira_issue(request):
     return json.dumps(get_issue("UNICORN-3646"))
+
 
 def github(request):
     return render_to_response('github.html')
