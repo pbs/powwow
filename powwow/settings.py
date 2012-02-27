@@ -9,6 +9,14 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+CONFLUENCE_USER = ''
+CONFLUENCE_PASS = ''
+CONFLUENCE_API = ''
+
+JIRA_USER = ''
+JIRA_PASS = ''
+JIRA_API = ''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
