@@ -3,6 +3,7 @@ import urllib
 import urllib2
 import json
 import datetime
+import functools
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
@@ -51,7 +52,10 @@ def confluence(request):
 
     params = {'content': page['content']}
     params.update(csrf(request))
-    return render_to_response('confluence.html', params)
+
+    response = render_to_response('confluence.html', params)
+    response = add_cors_headers(response)
+    return response
 
 
 def jira(request):
@@ -76,7 +80,10 @@ def jira(request):
     issues_details = [
         jira_issue(issue["key"], session) for issue in issues.get("issues")
     ]
-    return render_to_response('jira.html', {'issues': issues_details})
+
+    response = render_to_response('jira.html', {'issues': issues_details})
+    response = add_cors_headers(response)
+    return response
 
 
 def jira_issue(issue_id, session):
@@ -108,4 +115,12 @@ def jira_login():
 
 
 def github(request):
-    return render_to_response('github.html')
+    response = render_to_response('github.html')
+    response = add_cors_headers(response)
+    return response
+
+
+def add_cors_headers(response):
+    response['Access-Control-Allow-Origin'] = settings.ALLOWED_ORIGIN
+    response['Access-Control-Allow-Methods'] = 'POST, GET'
+    return response
