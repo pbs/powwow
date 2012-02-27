@@ -13,9 +13,12 @@ CONFLUENCE_USER = ''
 CONFLUENCE_PASS = ''
 CONFLUENCE_API = ''
 
+JIRA_URL = '' # api base uri
+JIRA_API = '%s/api/2.0.alpha1' % JIRA_URL # this is different depending on the jira version
+JIRA_AUTH = '%s/auth/1' % JIRA_URL
+JIRA_BROWSE_URL = ''
 JIRA_USER = ''
 JIRA_PASS = ''
-JIRA_API = ''
 
 DATABASES = {
     'default': {
