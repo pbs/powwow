@@ -64,8 +64,8 @@ def jira(request):
     response = opener.open(url)
 
     issues = json.loads(response.read())
-    print "*** %s" % issues
-    return render_to_response('jira.html', {'issues': issues.get("issues")})
+    issues_details = [get_issue(issue["key"], session) for issue in issues.get("issues")]
+    return render_to_response('jira.html', {'issues': issues_details})
     
 def jira_issue(request):
     return json.dumps(get_issue("UNICORN-3646"))
@@ -74,10 +74,19 @@ def jira_issue(request):
 def github(request):
     return render_to_response('github.html')
 
-def get_issue(issue_id):
-    req = urllib2.Request("%s/issue/%s" % (settings.JIRA_API, issue_id))
-    response = urllib2.urlopen(req)
-    return json.loads(response.read())
+def get_issue(issue_id, session):
+    url = "%s/issue/%s" % (settings.JIRA_API, issue_id)
+
+    opener = urllib2.build_opener()
+    opener.addheaders.append(('Cookie', 'JSESSIONID=%s' % session["JSESSIONID"]))
+    response = opener.open(url)
+    
+    # TODO: configurable jira url
+    JIRA_URL = "https://projects.pbs.org/jira/browse"
+
+    issue = json.loads(response.read())
+    issue["browse_url"] = "%s/%s" % (JIRA_URL, issue.get("key"))
+    return issue
     
 def login():
     url = "%s/session" % settings.JIRA_AUTH
@@ -91,5 +100,4 @@ def login():
         print e
         return {}
     session = json.loads(response.read())
-    print "*** session = %s" % session
     return { session["session"]["name"]: session["session"]["value"] }

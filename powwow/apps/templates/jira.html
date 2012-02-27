@@ -2,7 +2,7 @@
 <ul>
 {% for issue in issues %}
 <li>
-<a href="{{ issue.self }}">{{ issue.key }}</a>
+<a href="{{ issue.browse_url }}">{{ issue.key }}</a> {{ issue.fields.summary.value }}
 </li>
 {% endfor %}
 </ul>
