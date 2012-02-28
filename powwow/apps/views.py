@@ -97,7 +97,7 @@ def jira_find_issue(request):
                 issue = value.strip()
 
         issue_info = jira_issue(project.content + '-' + issue)
-        if issue_info is Hone:
+        if issue_info is None:
             return add_cors_headers(HttpResponse("The issue you are looking \
                     for does not exist in the current project."))
 
