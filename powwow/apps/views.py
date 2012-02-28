@@ -56,7 +56,7 @@ def confluence(request):
     params.update(csrf(request))
 
     response = render_to_response('confluence.html', params)
-    response = add_cors_headers(response, 'POST, GET')
+    response = add_cors_headers(response)
     return response
 
 
@@ -84,7 +84,7 @@ def jira(request):
     ]
 
     response = render_to_response('jira.html', {'issues': issues_details})
-    response = add_cors_headers(response, 'GET')
+    response = add_cors_headers(response)
     return response
 
 
@@ -102,7 +102,7 @@ def jira_find_issue(request):
                     in the current project.")
 
         response = render_to_response('jira_issue.html', {'issue': issue_info})
-        response = add_cors_headers(response, 'POST, GET')
+        response = add_cors_headers(response)
         return response
     else:
         return HttpResponse("You did not send any value to search for.")
@@ -156,11 +156,11 @@ def github(request):
     commits = json.loads(res.read())
 
     response = render_to_response('github.html', {'commits': commits})
-    response = add_cors_headers(response, 'GET')
+    response = add_cors_headers(response)
     return response
 
 
-def add_cors_headers(response, permissions):
+def add_cors_headers(response):
     response['Access-Control-Allow-Origin'] = settings.ALLOWED_ORIGIN
-    response['Access-Control-Allow-Methods'] = permissions
+    response['Access-Control-Allow-Methods'] = 'POST, GET'
     return response
