@@ -27,7 +27,7 @@ def index_dev(request):
 def local_dev(request):
     return render_to_response('app_dev.html')
 
-
+@csrf_exempt
 def confluence(request):
     spacekey = AppSettings.objects.get(name='conf_space')
     pagetitle = AppSettings.objects.get(name='conf_page')
@@ -44,17 +44,17 @@ def confluence(request):
             pagetitle.content
     )
     if page is None:
-        return HttpResponse("Could not find page "+spacekey+":"+pagetitle)
+        return add_cors_headers(HttpResponse("Could not find page " + \
+                spacekey + ":" + pagetitle))
 
     if request.method == 'POST':
         for key,value in request.POST.iteritems():
             if key == 'notes':
                 page['content'] = value
                 server.confluence1.storePage(token, page)
+        return add_cors_headers(HttpResponse("Saved"))
 
     params = {'content': page['content']}
-    params.update(csrf(request))
-
     response = render_to_response('confluence.html', params)
     response = add_cors_headers(response)
     return response
@@ -97,15 +97,16 @@ def jira_find_issue(request):
                 issue = value.strip()
 
         issue_info = jira_issue(project.content + '-' + issue)
-        if issue_info is None:
-            return HttpResponse("The issue you are looking for does not exist\
-                    in the current project.")
+        if issue_info is Hone:
+            return add_cors_headers(HttpResponse("The issue you are looking \
+                    for does not exist in the current project."))
 
         response = render_to_response('jira_issue.html', {'issue': issue_info})
         response = add_cors_headers(response)
         return response
     else:
-        return HttpResponse("You did not send any value to search for.")
+        return add_cors_headers(HttpResponse("You did not send any value to \
+                search for."))
 
 
 def jira_issue(issue_id, session=None):
@@ -151,7 +152,7 @@ def github(request):
     try:
         res = opener.open(url)
     except Exception:
-        return HttpResponse("Error while trying to access GitHub!")
+        return add_cors_headers(HttpResponse("Error trying to access GitHub!"))
 
     commits = json.loads(res.read())
 
