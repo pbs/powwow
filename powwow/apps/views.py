@@ -1,5 +1,4 @@
 import xmlrpclib
-import urllib
 import urllib2
 import json
 import datetime
@@ -9,6 +8,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt
 
 from powwow.apps.models import AppSettings
 
@@ -42,19 +42,19 @@ def confluence(request):
             pagetitle.content
     )
     if page is None:
-       return HttpResponse("Could not find page "+spacekey+":"+pagetitle)
+        return HttpResponse("Could not find page "+spacekey+":"+pagetitle)
 
     if request.method == 'POST':
-       for key,value in request.POST.iteritems():
-           if key == 'notes':
-               page['content'] = value
-               server.confluence1.storePage(token, page)
+        for key,value in request.POST.iteritems():
+            if key == 'notes':
+                page['content'] = value
+                server.confluence1.storePage(token, page)
 
     params = {'content': page['content']}
     params.update(csrf(request))
 
     response = render_to_response('confluence.html', params)
-    response = add_cors_headers(response)
+    response = add_cors_headers(response, 'POST, GET')
     return response
 
 
@@ -82,17 +82,43 @@ def jira(request):
     ]
 
     response = render_to_response('jira.html', {'issues': issues_details})
-    response = add_cors_headers(response)
+    response = add_cors_headers(response, 'GET')
     return response
 
 
-def jira_issue(issue_id, session):
+@csrf_exempt
+def jira_find_issue(request):
+    if request.method == 'POST':
+        project = AppSettings.objects.get(name='jira_project')
+        for key,value in request.POST.iteritems():
+            if key == 'issue':
+                issue = value.strip()
+
+        issue_info = jira_issue(project.content + '-' + issue)
+        if issue_info is None:
+            return HttpResponse("The issue you are looking for does not exist\
+                    in the current project.")
+
+        response = render_to_response('jira_issue.html', {'issue': issue_info})
+        response = add_cors_headers(response, 'POST, GET')
+        return response
+    else:
+        return HttpResponse("You did not send any value to search for.")
+
+
+def jira_issue(issue_id, session=None):
+    if session is None:
+        session = jira_login()
+
     url = "%s/issue/%s" % (settings.JIRA_API, issue_id)
 
     opener = urllib2.build_opener()
     opener.addheaders.append(('Cookie', 'JSESSIONID=%s' % \
             session["JSESSIONID"]))
-    response = opener.open(url)
+    try:
+        response = opener.open(url)
+    except Exception:
+        return None
 
     issue = json.loads(response.read())
     issue["browse_url"] = "%s/%s" % (settings.JIRA_BROWSE_URL, \
@@ -116,11 +142,11 @@ def jira_login():
 
 def github(request):
     response = render_to_response('github.html')
-    response = add_cors_headers(response)
+    response = add_cors_headers(response, 'GET')
     return response
 
 
-def add_cors_headers(response):
+def add_cors_headers(response, permissions):
     response['Access-Control-Allow-Origin'] = settings.ALLOWED_ORIGIN
-    response['Access-Control-Allow-Methods'] = 'POST, GET'
+    response['Access-Control-Allow-Methods'] = permissions
     return response

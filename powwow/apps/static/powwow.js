@@ -66,6 +66,15 @@ function jira(){
     });
 }
 
+function jira_search(form){
+    $('#jira_issue_container').html('Searching ...')
+    $.post(__POWWOW_SITE_URL + 'jira/search', $(form).serialize(),
+        function(data){
+            $('#jira_issue_container').html(data)
+        }
+    );
+}
+
 function github(){
     var container = $('#github_container');
     $.ajax({

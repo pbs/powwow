@@ -1,8 +1,28 @@
 <h3>JIRA stream</h3>
-<ul>
-{% for issue in issues %}
-<li>
-<a href="{{ issue.browse_url }}">{{ issue.key }}</a> {{ issue.fields.summary.value }}
-</li>
-{% endfor %}
-</ul>
+
+<p>
+<form onsubmit="jira_search(this);return false;" class="form-inline" action="" method="POST">
+  <span class="add-on"><i class="icon-fire"></i></span>
+  <input class="span2" id="inputIcon" name="issue" type="text" />
+  <a class="btn" href="javascript:void();" onclick="$(this).parent().submit()"><i class="icon-search"></i> Search</a>
+</form>
+</p>
+
+<div id="jira_issue_container">
+  <table class="table table-striped table-bordered table-condensed">
+  <thead>
+    <tr style="background-color: white;">
+      <th>Issue</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for issue in issues %}
+    <tr>
+      <td><a href="{{ issue.browse_url }}">{{ issue.key }}</a></td>
+      <td>{{ issue.fields.summary.value }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+</div>
