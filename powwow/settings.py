@@ -9,6 +9,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+APP_URL = '' # the apps absolute url
+
 CONFLUENCE_USER = ''
 CONFLUENCE_PASS = ''
 CONFLUENCE_API = ''
