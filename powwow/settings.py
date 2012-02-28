@@ -20,6 +20,10 @@ JIRA_BROWSE_URL = ''
 JIRA_USER = ''
 JIRA_PASS = ''
 
+GITHUB_USER = ''
+GITHUB_TOKEN = ''
+GITHUB_API = 'https://api.github.com'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

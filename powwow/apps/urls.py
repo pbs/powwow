@@ -8,5 +8,4 @@ urlpatterns = patterns('powwow.apps.views',
     url(r'^jira$', 'jira', name='jira'),
     url(r'^jira/search$', 'jira_find_issue', name='jira_find_issue'),
     url(r'^github$', 'github', name='github'),
-    url(r'^crossdomain.xml$', 'crossdomain', name='crossdomain'),
 )

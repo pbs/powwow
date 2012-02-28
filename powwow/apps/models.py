@@ -3,7 +3,8 @@ from django.db import models
 SETTING_NAME = (
     ('conf_space', 'Confluence Space Key'),
     ('conf_page', 'Confluence Page'),
-    ('jira_project', 'JIRA Project Name'),
+    ('jira_project', 'JIRA Project Code Name'),
+    ('github_project', 'GitHub Project'),
 )
 
 class AppSettings(models.Model):

@@ -1,4 +1,5 @@
-<h3>Daily stand-up notes</h3>
+<h2>Daily stand-up notes</h2>
+<br />
 <form id="confluence_form" onsubmit="confluence_save(this);return false;" action="" method="post">
   {% csrf_token %}
   <fieldset>
@@ -9,7 +10,7 @@
         <textarea class="input-xxlarge" name="notes" rows="20">{{ content }}</textarea>
       </div>
     </div>
-    <div class="form-actions" style="text-align: right">
+    <div>
       <button type="submit" class="btn btn-primary">Save changes</button>
     </div>
   </fieldset>

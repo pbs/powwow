@@ -1,4 +1,4 @@
-<h3>JIRA stream</h3>
+<h2>JIRA activity stream</h2>
 
 <p>
 <form onsubmit="jira_search(this);return false;" class="form-inline" action="" method="POST">
@@ -14,13 +14,15 @@
     <tr style="background-color: white;">
       <th>Issue</th>
       <th>Summary</th>
+      <th>Assignee</th>
     </tr>
   </thead>
   <tbody>
   {% for issue in issues %}
     <tr>
-      <td><a href="{{ issue.browse_url }}">{{ issue.key }}</a></td>
+      <td><a href="{{ issue.browse_url }}" target="_blank">{{ issue.key }}</a></td>
       <td>{{ issue.fields.summary.value }}</td>
+      <td style="white-space:nowrap;">{{ issue.fields.assignee.value.displayName }}</td>
     </tr>
   {% endfor %}
   </tbody>

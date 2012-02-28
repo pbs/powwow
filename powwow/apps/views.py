@@ -67,7 +67,7 @@ def jira(request):
 
     jql = "project = %s AND updated >= %s order by updated" % \
             (project.content, date)
-    url = ("%s/search?jql=%s&startAt=0&maxResults=10&JSESSIONID=%s"
+    url = ("%s/search?jql=%s&startAt=0&maxResults=15&JSESSIONID=%s"
            % (settings.JIRA_API, urllib2.quote(jql), session["JSESSIONID"]))
 
     opener = urllib2.build_opener()
@@ -141,7 +141,19 @@ def jira_login():
 
 
 def github(request):
-    response = render_to_response('github.html')
+    project = AppSettings.objects.get(name='github_project')
+
+    url = '%s/repos/%s/%s/commits'\
+            % (settings.GITHUB_API, settings.GITHUB_USER, project.content)
+    opener = urllib2.build_opener()
+    try:
+        res = opener.open(url)
+    except Exception:
+        return HttpResponse("Error while trying to access GitHub!")
+
+    commits = json.loads(res.read())
+
+    response = render_to_response('github.html', {'commits': commits})
     response = add_cors_headers(response, 'GET')
     return response
 
