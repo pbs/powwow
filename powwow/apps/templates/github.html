@@ -11,7 +11,7 @@
   <tbody>
   {% for c in commits|slice:":15" %}
     <tr>
-      <td><a href="{{ c.commit.url }}" target="_blank">{{ c.sha|slice:":6" }}</a></td>
+      <td><a href="https://github.com/{{ user }}/{{ project }}/commit/{{ c.sha }}" target="_blank">{{ c.sha|slice:":6" }}</a></td>
       <td style="white-space: nowrap;">{{ c.commit.author.name }}</td>
       <td>{{ c.commit.message }}</td>
     </tr>

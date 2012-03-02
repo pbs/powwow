@@ -43,9 +43,10 @@ def confluence(request):
             spacekey.content,
             pagetitle.content
     )
+
     if page is None:
-        return add_cors_headers(HttpResponse("Could not find page " + \
-                spacekey + ":" + pagetitle))
+        response_text = "Could not find page %s:%s" % (spacekey, pagetitle)
+        return add_cors_headers(HttpResponse(response_text))
 
     if request.method == 'POST':
         for key,value in request.POST.iteritems():
@@ -64,17 +65,19 @@ def jira(request):
     project = AppSettings.objects.get(name='jira_project')
     session = jira_login()
 
+    #TODO the number of days back should be configurable
     date = datetime.datetime.now() - datetime.timedelta(days=7)
     date = date.strftime("%Y-%m-%d")
 
-    jql = "project = %s AND updated >= %s order by updated" % \
-            (project.content, date)
+    jql = "project = %s AND updated >= %s order by updated" %(
+            project.content, date
+        )
     url = ("%s/search?jql=%s&startAt=0&maxResults=15&JSESSIONID=%s"
            % (settings.JIRA_API, urllib2.quote(jql), session["JSESSIONID"]))
 
     opener = urllib2.build_opener()
-    opener.addheaders.append(('Cookie', 'JSESSIONID=%s' % \
-            session["JSESSIONID"]))
+    opener.addheaders.append(('Cookie', 'JSESSIONID=%s'
+            % session["JSESSIONID"]))
     response = opener.open(url)
 
     issues = json.loads(response.read())
@@ -116,16 +119,15 @@ def jira_issue(issue_id, session=None):
     url = "%s/issue/%s" % (settings.JIRA_API, issue_id)
 
     opener = urllib2.build_opener()
-    opener.addheaders.append(('Cookie', 'JSESSIONID=%s' % \
-            session["JSESSIONID"]))
+    opener.addheaders.append(('Cookie', 'JSESSIONID=%s'
+            % session["JSESSIONID"]))
     try:
         response = opener.open(url)
     except Exception:
         return None
 
     issue = json.loads(response.read())
-    issue["browse_url"] = "%s/%s" % (settings.JIRA_BROWSE_URL, \
-            issue.get("key"))
+    issue["browse_url"] = "%s/%s" %(settings.JIRA_BROWSE_URL,issue.get("key"))
     return issue
 
 
@@ -146,8 +148,9 @@ def jira_login():
 def github(request):
     project = AppSettings.objects.get(name='github_project')
 
-    url = '%s/repos/%s/%s/commits'\
-            % (settings.GITHUB_API, settings.GITHUB_USER, project.content)
+    url = '%s/repos/%s/%s/commits' % (
+            settings.GITHUB_API, settings.GITHUB_USER, project.content
+        )
     opener = urllib2.build_opener()
     try:
         res = opener.open(url)
@@ -156,7 +159,9 @@ def github(request):
 
     commits = json.loads(res.read())
 
-    response = render_to_response('github.html', {'commits': commits})
+    params = {'commits': commits, 'project': project.content,
+            'user':settings.GITHUB_USER}
+    response = render_to_response('github.html', params)
     response = add_cors_headers(response)
     return response
 
